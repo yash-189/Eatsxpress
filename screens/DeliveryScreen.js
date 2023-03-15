@@ -2,7 +2,7 @@ import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import * as Progress from 'react-native-progress';
 import { XMarkIcon } from 'react-native-heroicons/solid';
-import takeaway from '../assets/TakeAway.png'
+import takeaway from '../assets/TakeAwayy.png'
 import take from '../assets/Take.png'
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';

@@ -1,12 +1,22 @@
 import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Pressable } from 'react-native'
-import React, { useState } from 'react'
-import { CheckCircleIcon, ChevronRightIcon, StarIcon } from 'react-native-heroicons/solid'
+import React, { useEffect, useState } from 'react'
+import { ArrowLeftIcon, CheckCircleIcon, ChevronRightIcon, StarIcon } from 'react-native-heroicons/solid'
 import { getAuth, signOut } from 'firebase/auth'
+import { child, getDatabase, onValue, push, ref, set, update } from 'firebase/database'
+import { useSelector } from 'react-redux'
+import { selectBasketItems } from '../features/basketSlice'
+import OrderCard from '../components/OrderCard'
+import { useNavigation } from '@react-navigation/native'
 
 const MyAccountscreen = () => {
 
+    const navigation = useNavigation()
     const auth = getAuth()
+
+    const db = getDatabase()
     const [user, setuser] = useState(auth?.currentUser)
+    const items = useSelector(selectBasketItems)
+
 
     const signout = async () => {
         signOut(auth).then(() => {
@@ -17,10 +27,106 @@ const MyAccountscreen = () => {
         });
     }
 
+    const [ordersData, setordersData] = useState()
+
+    useEffect(() => {
+
+
+        // const date = Date.now()
+
+        // const orderRef = ref(db, 'users/' + auth.currentUser.uid + '/orders');
+
+
+
+        // const dataMap = items.map((v, i) =>
+        //     ({ "date": date, ...v })
+        // )
+
+        // console.log(dataMap, 'ooooooo');
+
+
+        // const order = push(orderRef)
+        // set(order, dataMap)
+
+
+
+
+        const orderRef = ref(db, 'users/' + auth.currentUser.uid + '/orders');
+        onValue(orderRef, (snapshot) => {
+            const data = snapshot.val();
+
+            //  console.log(data,'yyyydata');
+            if (data) {
+                const array = Object.values(data)
+                console.log(array, 'kkkk');
+                const letk = array.flat()
+                let rr = []
+                const uniqueValues = new Set(letk.map(v => { v.date, v.name }));
+                const modifiedArray = letk.flatMap((val, idx) => {
+                    // filter((item) => item.date === val.date)
+                    return { h: val.name, k: idx }
+                })
+
+
+
+
+                console.log(array.flat(), modifiedArray, uniqueValues, 'oooooooooooooo');
+
+
+                const duplicates = {};
+
+                for (const current of letk) {
+                    const key = `${current.restaurant}-${current.date}`;
+
+                    const existing = duplicates[key] && duplicates[key].find(
+                        item => item.name === current.name && item.description === current.description
+                    );
+
+                    if (existing) {
+                        existing.quantity++;
+                    } else {
+                        duplicates[key] = duplicates[key] || [];
+                        duplicates[key].push({ ...current, quantity: 1 });
+                    }
+                }
+
+                const result = Object.entries(duplicates).map(([key, objects]) => {
+                    const [restaurant, date] = key.split('-');
+
+                    return { restaurant, date, objects };
+                });
+
+                console.log(result, 'ppp');
+
+                setordersData(result)
+            }
+
+            console.log(ordersData, 'oooooo');
+
+
+
+        }, {
+            onlyOnce: true
+        });
+    }, [])
+
+
+    // useEffect(() => {
+    //     throw new Error('Error ! Please try again later')
+    //   }, [])
+
+
 
     return (
-        <ScrollView contentContainerStyle={{ paddingBottom: 150 }} className=''>
+        <ScrollView contentContainerStyle={{ paddingBottom: 150 }} className='' stickyHeaderIndices={[0]} >
+             <View style={{elevation:6}} className='pt-14 bg-white shadow-black shadow-2xl border-b border-gray-100 px-4 pb-4  flex-row  space-x-4 items-center'>
+                    <ArrowLeftIcon onPress={() => navigation.goBack()} size={24} color={'gray'} />
+                    <Text className='text-gray-800 font-bold '>My Account</Text>
+
+
+                </View>
             <SafeAreaView className=' px-4 bg-white  mb-6'>
+               
                 <View className=' border-b-2 py-5'>
                     <View className='flex-row justify-between items-center'>
                         <Text className='text-lg font-extrabold text-gray-800 uppercase'>{user?.displayName}</Text>
@@ -94,90 +200,27 @@ const MyAccountscreen = () => {
 
 
             <Text className=' px-4 text-xs text-gray-600 mb-3'>PAST ORDERS</Text>
-            <View className=' px-4 bg-white  '>
-                <View className='border-b-2 border-gray-500 py-3.5'>
-                    <View className='    '>
-                        <View className=' border-b border-gray-300 py-3'>
-                            <View className='flex-row  justify-between   items-center'>
-                                <Text className='text-base font-normal   text-gray-800 capitalize'>Restaurant</Text>
-                                <View className='flex-row items-center space-x-1'>
-                                    <Text className='text-sm  text-gray-500'>Delivered</Text>
-                                    <CheckCircleIcon size={20} color='#5cdc00'
-                                    />
-                                </View>
 
-
-
-                            </View>
-
-                            <View className='flex-row space-x-2 mt-0.5'>
-                                <Text className='text-xs  text-gray-500/90 '>Location</Text>
-                            </View>
-                            <View className='flex-row mt-1.5 items-center '>
-                                <Text className='text-sm  text-gray-500 '>₹96</Text>
-                                <ChevronRightIcon size={18} color='gray' />
-
-                            </View>
-
-                        </View>
-
-
+            {!ordersData ? <View className=' px-4 bg-white  '>
+                <View className=' py-3.5 '>
+                    <Text className='text-sm text-gray-600'>No orders</Text>
                     </View>
+                    </View>:
+            <>
+            {ordersData?.map((item) => {
 
+                return <OrderCard restaurant={item?.restaurant} date={item.date} dish={item.objects?.map(n => `${n.name} (${n.quantity}) | `)} price={item.objects?.reduce((total, item) =>
+                    total += item.price * item.quantity, 0)} />
 
-                    <View className='  '>
-                        <View className='  pt-3'>
-                            <View className='flex-row  justify-between   items-center'>
-                                <Text className='text-sm  text-gray-500 capitalize'>Dish name (1)</Text>
-
-
-
-
-                            </View>
-
-                            <View className='flex-row space-x-2 mt-0.5'>
-                                <Text className='text-xs  text-gray-500/60 '>Date, 9:12 PM</Text>
-                            </View>
-                            <View className='flex-row  items-center my-4 '>
-                                <TouchableOpacity className='border border-gray-900'>
-                                    <Text className='uppercase py-2 px-14 font-bold text-gray-800'>reorder</Text>
-                                </TouchableOpacity>
-
-                            </View>
-
-
-                            <View className=' '>
-                                <Text className='text-xs  text-gray-500/70 '>Your rating</Text>
-                                <View className='flex-row items-center space-x-4 my-1 '>
-                                    <View className='flex-row space-x-1'>
-                                        <StarIcon size={16} color='orange' />
-                                        <Text className='text- font-semibold  text-gray-700 '>5</Text>
-                                    </View>
-
-                                    <Text className='text-base font-semibold  text-gray-700 '>|</Text>
-                                    <Text className='text- font-semibold  text-gray-700 '>Loved it</Text>
-
-                                </View>
-
-                            </View>
-
-                        </View>
-
-
-                    </View>
-                </View>
-
-
-
-
-            </View>
-
+            })}
+            </>
+}
 
             <View className=' py-6 px-4 bg-white'>
-            <TouchableOpacity className='border border-[#FB6E3B] w-1/2' onPress={()=>signout()}>
-                                    <Text className='uppercase text-center py-2 px-4 font-bold text-[#FB6E3B]'>Logout</Text>
-                                </TouchableOpacity>
-               
+                <TouchableOpacity className='border border-[#FB6E3B] w-1/2' onPress={() => signout()}>
+                    <Text className='uppercase text-center py-2 px-4 font-bold text-[#FB6E3B]'>Logout</Text>
+                </TouchableOpacity>
+
             </View>
         </ScrollView>
     )

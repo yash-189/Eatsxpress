@@ -10,6 +10,7 @@ import Login from '../screens/Login';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../components/Loader';
+import LoginPhone from '../screens/LoginPhone';
 
 
 
@@ -59,8 +60,19 @@ const AuthStack = () => {
 
           </Stack.Screen>
           : null}
+          <Stack.Screen
+          name='phone'
+          options={{ headerShown: false }}
+          component={LoginPhone}>
 
+        </Stack.Screen>
 
+<Stack.Screen
+          name='signup'
+          options={{ headerShown: false }}
+          component={Signup}>
+
+        </Stack.Screen>
 <Stack.Screen
           name='login'
           options={{ headerShown: false,
@@ -75,12 +87,7 @@ const AuthStack = () => {
         </Stack.Screen>
 
         
-        <Stack.Screen
-          name='signup'
-          options={{ headerShown: false }}
-          component={Signup}>
-
-        </Stack.Screen>
+      
 
         
 

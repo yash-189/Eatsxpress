@@ -177,6 +177,7 @@ const TabBar = () => {
         component={NotificationScreen}
         options={{
           tabBarLabel: 'notification',
+          headerShown:false,
           tabBarIcon: ({ focused, color, size }) => (
             <BellIcon name="notification" color={color} size={focused ? 30 : 28} />
           ),

@@ -10,8 +10,8 @@ import loadingImage from '../assets/takeout-food.png'
 import { useDispatch, useSelector } from 'react-redux';
 import { addToFav, removeFromFav, selectFavItems } from '../features/favSlice';
 
-const FoodCardItem2 = ({ dark, id, name, rating, Rimage = 'image-f50a941355d269c41c7d444ce512065775b077f2-800x533-webp', lat,lng,offername, offertype, offer, time, reviews, address, category }) => {
-    console.log(dark, 'ffddd', dark ? 'white' : 'text-black', name, Rimage, id);
+const FoodCardItem2 = ({ dark, id, name, rating, image = 'image-f50a941355d269c41c7d444ce512065775b077f2-800x533-webp', lat,lng,offername, offertype, offer, time, reviews, address, category }) => {
+    console.log(dark, 'ffddd', dark ? 'white' : 'text-black', name, image, id);
 
     const [first, setfirst] = useState(false)
 
@@ -19,10 +19,12 @@ const FoodCardItem2 = ({ dark, id, name, rating, Rimage = 'image-f50a941355d269c
     const dispatch = useDispatch()
     const favItems = useSelector(selectFavItems)
     const onpress = () => {
+        const obj = { id, name, rating, image, lat, lng,  time, reviews, address, category }
         if (addedTofav) {
+
             dispatch(removeFromFav({ id }))
         } else {
-            dispatch(addToFav({ id, name, rating, Rimage }))
+            dispatch(addToFav(obj))
         }
         console.log('tttttttttttttttt', favItems, name);
     }
@@ -37,7 +39,7 @@ const FoodCardItem2 = ({ dark, id, name, rating, Rimage = 'image-f50a941355d269c
                  style={{ elevation: 6 }}
                  >
                     <Image source={{
-                        uri: urlFor(Rimage).url()
+                        uri: urlFor(image).url()
                     }}
                         resizeMode='center' className='h-44 w-36 rounded-xl ' />
                     <LinearGradient

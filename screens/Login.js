@@ -154,6 +154,12 @@ const Login = () => {
                         <Text onPress={() => navigation.navigate('signup')} className='text-xs font-semibold text-[#FB6E3B]'>Sign up</Text>
 
                     </View>
+                    <View className='mt-[2%] flex-row space-x-1 justify-center'>
+                        <Text className='text-xs text-gray-400'>Login using</Text>
+
+                        <Text onPress={() => navigation.navigate('phone')} className='text-xs font-semibold text-[#FB6E3B]'>Phone number</Text>
+
+                    </View>
                 </View>
             </KeyboardAvoidingView>
         </ScrollView>

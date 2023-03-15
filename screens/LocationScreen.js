@@ -1,4 +1,4 @@
-import { View, Text, NativeModules } from 'react-native'
+import { View, Text, NativeModules, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
@@ -27,7 +27,7 @@ const LocationScreen = () => {
     const [address, setaddress] = useState(null)
 
     const db = getDatabase();
- const auth = getAuth()
+    const auth = getAuth()
 
     const dispach = useDispatch()
 
@@ -52,33 +52,44 @@ const LocationScreen = () => {
             longitudeDelta: 0.005
         })
         console.log(address, 'adress');
-        update(ref(db, 'users/'+auth.currentUser.uid),{
-            address:[address[0]]
+        update(ref(db, 'users/' + auth.currentUser.uid), {
+            address: [address[0]]
         })
-              .then((res)=>{
+            .then((res) => {
                 console.log('location saver');
-              })
-              .catch(err=>console.log(err,'location error'))
+            })
+            .catch(err => console.log(err, 'location error'))
 
         setloading(false)
 
     }
-    useEffect(() => {
-        userLocation()
-
-
-
-    }, []);
+  
 
 
     let text = 'Waiting..';
     if (errorMsg) {
         text = errorMsg;
+        Alert.alert(text = errorMsg)
+
     } else if (location) {
         text = JSON.stringify(location);
     }
     console.log(text, 'location');
 
+    useEffect(() => {
+        userLocation()
+
+
+        setTimeout(() => {
+            if (text=='waiting..') {
+                // throw new Error('Error ! Please try again later')
+                userLocation()
+            }
+        }, 20000);
+
+
+
+    }, []);
     return (
         <>
             {loading ? <View className='flex-1 justify-center items-center'>

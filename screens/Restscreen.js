@@ -149,7 +149,7 @@ const Restscreen = ({ route }) => {
                     <FlatList
                         data={dishes}
                         renderItem={({ item }) => (
-                            <FoodItem3 key={item._id} name={item.name} rating={item.rating} price={item.price} description={item.description} image={item.image} id={item._id} restaurant={restaurantData.name}  lat={restaurantData?.lcation?.lat} lng={restaurantData?.lcation?.lng} />
+                            <FoodItem3 key={item._id} name={item.name} rating={item.rating} price={item.price} description={item.description} image={item.image} id={item._id} restaurant={restaurantData.name}  lat={restaurantData?.location?.lat} lng={restaurantData?.location?.lng} />
                         )}
                     //  StickyHeaderComponent={<Text>header</Text>}
                     // ListHeaderComponent={()=><Text>1231312</Text>}

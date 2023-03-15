@@ -77,7 +77,7 @@ const UserStack = () => {
           </Stack.Screen>
           <Stack.Screen name='MY ACCOUNT'
             options={{
-              // headerShown:false,
+              headerShown:false,
               presentation: 'fullScreenModal',
 
             }}

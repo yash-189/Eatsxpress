@@ -17,7 +17,7 @@ import { setSignIn } from './features/authSlice';
 import AuthStack from './stacks/AuthStack';
 import UserStack from './stacks/UserStack';
 import Loader from './components/Loader';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 NativeWindStyleSheet.setOutput({
@@ -41,6 +41,7 @@ const Main = () => {
 
 
 
+
   useEffect(() => {
 
 
@@ -58,10 +59,10 @@ const Main = () => {
         dispatch(setSignIn(us))
 
 
-        setuser(user);
+        // setuser(user);
       } else {
         // User is signed out
-        setuser(undefined);
+        setuser(false);
       }
       setloading(false)
     });
@@ -69,6 +70,8 @@ const Main = () => {
     return unsubscribeFromAuthStatuChanged;
   }, []);
 
+
+  
 
 
   if (loading) return <Loader />

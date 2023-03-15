@@ -5,6 +5,9 @@ import { BookmarkIcon, PlusCircleIcon } from 'react-native-heroicons/solid'
 import { ShoppingBagIcon, HandThumbUpIcon, MinusCircleIcon } from 'react-native-heroicons/outline'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectBasketItems, addToBasket, selectBasketItemsWithId, removeFromBasket } from '../../features/basketSlice'
+import { getFav } from '../../features/favSlice'
+import { getAuth } from 'firebase/auth'
+import { onValue, ref } from 'firebase/database'
 
 const RestaurantFoodCard = ({name,description,price,image, id}) => {
     // console.log(
@@ -15,9 +18,26 @@ const RestaurantFoodCard = ({name,description,price,image, id}) => {
     console.log(items, 'items');
 
     const dispach = useDispatch()
+    const auth = getAuth()
+    const db = getDatabase()
 
     const addToBag = () => {
         dispach(addToBasket({name,description,price,image, id}))
+
+
+        const favRef = ref(db, 'users/' + auth.currentUser.uid+'/favorite');
+        onValue(favRef, (snapshot) => {
+                const data = snapshot.val();
+              
+            //  console.log(data,'yyyydata');
+             const array = Object.values(data)
+         
+
+             console.log( Object.assign({}, array),'itemssfav');
+             dispach(getFav(array))
+          }, {
+            onlyOnce: true
+          });
     }
     const removeFromBag = ()=>{
         if(!items.length) return

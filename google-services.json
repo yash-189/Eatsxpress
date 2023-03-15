@@ -1,0 +1,85 @@
+{
+  "project_info": {
+    "project_number": "735371731452",
+    "firebase_url": "https://eatxpress-93e52-default-rtdb.firebaseio.com",
+    "project_id": "eatxpress-93e52",
+    "storage_bucket": "eatxpress-93e52.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735371731452:android:fbcf7e4b140da43c485279",
+        "android_client_info": {
+          "package_name": "com.yash189.EatsXpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735371731452-7s78ec56sogvqva833g2qffmf9habp71.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yash189.EatsXpress",
+            "certificate_hash": "6980e3e2daa1afce7a2d59f7e2125e348fafd252"
+          }
+        },
+        {
+          "client_id": "735371731452-hi5elct5l5vcceq58u1ujfg908ir0c3l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yash189.EatsXpress",
+            "certificate_hash": "80af4a06251aa466ea1f3f29537b0e16c636c397"
+          }
+        },
+        {
+          "client_id": "735371731452-didhqm1apu864eavl2pr72ts6b7lgv1f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6_2KXjGLiDBJKt3tPiN-7iE8ROCgizaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735371731452-didhqm1apu864eavl2pr72ts6b7lgv1f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735371731452:android:28e5a5d6b3190f72485279",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735371731452-didhqm1apu864eavl2pr72ts6b7lgv1f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6_2KXjGLiDBJKt3tPiN-7iE8ROCgizaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735371731452-didhqm1apu864eavl2pr72ts6b7lgv1f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

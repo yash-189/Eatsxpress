@@ -1,108 +1,139 @@
 import { View, Text, Image, StyleSheet, Button, TouchableOpacity } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Onboarding from 'react-native-onboarding-swiper';
 import { useNavigation } from '@react-navigation/native';
 import * as Progress from 'react-native-progress';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { getStorage } from '../features/authSlice';
+import { Dimensions } from 'react-native';
+
+import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
+import Page from '../components/Page';
+import first from '../assets/chef.png'
+import second from '../assets/cuate.png'
+import third from '../assets/orderfood.png'
+import { ScrollView } from 'react-native';
 
 
-const Page1 = () => (
 
-    <>
-        <Image className='h-80 w-96 ' resizeMode='cover' source={require('../assets/chef.png')} />
 
-        <Text className='text-xl mt-2 font-bold text-gray-800'>Search for your favorite </Text>
-        <Text className='text-xl font-bold text-gray-800'>food near you</Text>
-        <Text className='text-gray-500 mt-2 text-sm font-semibold'>
-            Discover food from over 300+
-        </Text>
-        <Text className='text-gray-500  text-sm font-semibold'>restaurants</Text>
-    </>
-);
 
-const Page2 = () => (
 
-    <>
-        <Image className='h-80 w-96 ' resizeMode='cover' source={require('../assets/cuate.png')} />
 
-        <Text className='text-xl font-bold text-gray-800'>EatsXpress Food With Great </Text>
-        <Text className='text-xl font-bold text-gray-800'>Express Delivery</Text>
-        <Text className='text-gray-500 mt-2 text-sm font-semibold'>
-            Fast and easy food delivery from
-        </Text>
-        <Text className='text-gray-500  text-sm font-semibold'>the best restaurants near you</Text>
-    </>
-);
+const IMAGE_WIDTH = 350;
+const IMAGE_HEIGHT = 290;
 
-const Page3 = () => (
 
-    <>
-        <Image className='h-80 w-96 ' resizeMode='cover' source={require('../assets/orderfood.png')} />
+const DATA = [
+    {
+        image: first,
+        title: 'Search for your favorite',
+        subTitle: 'food near you',
+        description: 'Discover food from over 300+',
+        desc2: 'restaurants'
 
-        <Text className='text-xl mt-4 font-bold text-gray-800'>Dine-in Experience, </Text>
-        <Text className='text-xl font-bold text-gray-800'>Delivered</Text>
-        <Text className='text-gray-500 mt-2 text-sm font-semibold'>
-            Get restaurant-quality meals at home
-        </Text>
-        <Text className='text-gray-500  text-sm font-semibold'>order now and enjoy!</Text>
-    </>
-);
+    },
+    {
+        image: second,
+        title: 'EatsXpress Food With Great',
+        subTitle: 'Express Delivery',
+        description: 'Fast and easy food delivery from',
+        desc2: 'the best restaurants near you'
+
+    },
+    {
+        image: third,
+        title: 'Dine-in Experience,',
+        subTitle: 'Delivered',
+        description: 'Get restaurant-quality meals at home',
+        desc2: 'order now and enjoy!'
+
+    }
+
+]
+
+
+
+
 
 
 
 
 const OnboardingScreen = () => {
     const navigation = useNavigation()
-    const [number, setnumber] = useState(1)
- 
+    
+
 
 
     const onPressFinish = async () => {
-       
+
         navigation.navigate('signup');
-       
+        await AsyncStorage.setItem('ONBOARDED', 'true');
+
     };
 
-    const changePageHandler = () => {
+   
 
-        if (number >= 3) return onPressFinish()
-        setnumber(prev => prev + 1)
-    }
+
+
+    const translateX = useSharedValue(0)
+
+    const scrollHandler = useAnimatedScrollHandler((event) => {
+        // 'worklet';
+        // console.log(event.contentOffset.x);
+        translateX.value = event.contentOffset.x
+       
+
+
+    })
+
+
+
 
 
   
 
 
 
-
-
-
-
     return (
 
 
-        <View className='flex-1 justify-center items-center bg-white'>
+        <View style={[styles.container]} className='  items-center bg-white'>
 
-            {number == 1 && <Page1 />}
-            {number == 2 && <Page2 />}
-            {number == 3 && <Page3 />}
-            {number == 4 && <View className='flex-1 justify-center items-center'>
-                <Progress.Circle size={40} color={'#FB6E3B'} indeterminate={true} borderWidth={2} />
-            </View>
-            }
-            <View className='flex-row space-x-1 mt-6'>
-                <Text className={` h-1 transition-all ${number == 1 ? 'w-8 bg-[#FB6E3B]' : 'w-2 bg-gray-400/60'} rounded-xl`}></Text>
-                <Text className={` h-1 transition-all ${number == 2 ? 'w-8 bg-[#FB6E3B]' : 'w-2 bg-gray-400/60'} rounded-xl`}></Text>
-                <Text className={` h-1 transition-all ${number == 3 ? 'w-8 bg-[#FB6E3B]' : 'w-2 bg-gray-400/60'} rounded-xl`}></Text>
-            </View>
-            <View className=' mx-4 mt-6'>
-                <TouchableOpacity className='bg-[#FB6E3B] shadow-md shadow-black rounded-xl  w-[320]  py-3' onPress={() => changePageHandler()}>
+         
+
+            <Animated.ScrollView 
+            style={[styles.container]}
+                onScroll={scrollHandler}
+                
+                horizontal pagingEnabled={true}  showsHorizontalScrollIndicator={false}
+            >
+
+                {DATA.map((item, index) => {
+                    return <Page key={index.toString()} title={item.title} index={index} image={item.image}
+                        translateX={translateX}
+                        desc2={item.desc2} description={item.description}
+                        subTitle={item.subTitle}
+                    />
+                })}
+            </Animated.ScrollView>
+
+
+
+
+          
+
+
+
+
+
+            <View className=' absolute  bottom-6'>
+                {/* <TouchableOpacity className='bg-[#FB6E3B] shadow-md shadow-black rounded-xl  w-[320]  py-3' onPress={() => changePageHandler()}>
 
                     <Text className='text-center text-white font-bold text-lg'>Next</Text>
-                </TouchableOpacity>
-                <TouchableOpacity className='' onPress={()=>setnumber(3)}>
+                </TouchableOpacity> */}
+                <TouchableOpacity className='' onPress={() => onPressFinish()}>
                     <Text className='text-center text-gray-400 mt-4 font-bold text-sm'>SKIP</Text>
                 </TouchableOpacity>
             </View>
@@ -121,44 +152,27 @@ export default OnboardingScreen
 
 
 const styles = StyleSheet.create({
+
+
+    container: {
+        // flex: 1,
+        // height:900,
+        backgroundColor: '#fff',
+        paddingBottom:40
+    },
     title: {
         fontSize: 24,
         fontWeight: '800',
         lineHeight: 30,
         textAlign: 'center'
     },
+    image: {
+        width: IMAGE_WIDTH,
+        height: IMAGE_HEIGHT
+    }
 
 })
 
 
 
 
-{/* <Onboarding
-DotComponent={Square}
-NextButtonComponent={Next}
-SkipButtonComponent={Skip}
-DoneButtonComponent={Done}
-titleStyles={{ color: 'blue' }} // set default color for the title
-pages={[
-  {
-    backgroundColor: '#fff',
-    image: <Image source={require('./images/circle.png')} />,
-    title: 'Onboarding',
-    subtitle: 'Done with React Native Onboarding Swiper',
-    titleStyles: { color: 'red' }, // overwrite default color
-  },
-  {
-    backgroundColor: '#FB6E3B',
-    image: <Image source={require('./images/square.png')} />,
-    title: 'The Title',
-    subtitle: 'This is the subtitle that sumplements the title.',
-  },
-  {
-    backgroundColor: '#999',
-    image: <Image source={require('./images/triangle.png')} />,
-    title: 'Triangle',
-    subtitle: "Beautiful, isn't it?",
-  },
-]}
-/>
-); */}

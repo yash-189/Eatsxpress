@@ -4,10 +4,10 @@
     "slug": "EatsXpress",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/iconn.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash-screen.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,17 +21,27 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.yash189.EatsXpress"
     },
+    "androidStatusBar": {
+      "backgroundColor": "#ffffff",
+      "barStyle": "dark-content",
+      "translucent": true,
+      "hidden": false
+  },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptiveicon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.yash189.EatsXpress"
+      "package": "com.yash189.EatsXpress",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/perf",
+      "@react-native-firebase/crashlytics",
       [
         "expo-build-properties",
         {

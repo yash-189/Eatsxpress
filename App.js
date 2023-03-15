@@ -12,6 +12,10 @@ import 'firebase/auth';
 
 import app, { auth } from './firebaseConfig';
 import Main from './Main';
+import ErrorBoundary from 'react-native-error-boundary'
+import { StyleSheet, Text, View } from "react-native";
+import Test from "./screens/Test";
+import Example from "./screens/Example";
 
 
 NativeWindStyleSheet.setOutput({
@@ -27,7 +31,35 @@ export default function App({ route }) {
   });
   
 
+  const ErrorFallback = (props) => (
+    <View style={styles.container}>
+       <Text style={styles.title}>Something happened!</Text>
+       <Text style={styles.text}>{props.error.toString()}</Text>
+    </View>
+ )
  
+ const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop:20,
+    backgroundColor: '#ecf0f1',
+    padding: 8,
+    textAlign: 'center',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  icon: {
+    fontSize: 48
+  },
+  text: {
+    marginVertical: 16
+  }
+});
 
 
 
@@ -43,7 +75,11 @@ export default function App({ route }) {
     <NavigationContainer>
    
       <Provider store={store}>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Main/>
+        {/* <Test/> */}
+        {/* <Example/> */}
+        </ErrorBoundary>
 
 
 

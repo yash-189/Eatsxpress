@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+import { getAuth } from 'firebase/auth';
+import { getDatabase, push, ref, set, update } from 'firebase/database';
+
+
+
+
 export const basketSlice = createSlice({
     name: 'basket',
     initialState: {
@@ -29,11 +35,36 @@ export const basketSlice = createSlice({
             //     console.log('lengtg itemsstate', result);
             // }
             // else {
-            state.items = [...state.items, action.payload]
+            // state.items = [...state.items, action.payload]
 
             // }
             // console.log(state.items, 'itemsstate', newCart);
+
+
+            // updating firebase database
+            const auth = getAuth()
+            const db = getDatabase();
+
+
+            const cartRef = ref(db, 'users/' + auth.currentUser.uid + '/cart');
+            const postData = action.payload
+
+            const newItemRef = push(cartRef);
+            set(newItemRef,
+                postData
+            );
         },
+
+
+        getCart: (state, action) => {
+           
+            state.items = [...action.payload]
+
+
+        },
+
+
+
         removeFromBasket: (state, action) => {
             const index = state.items.findIndex((item) => item.id === action.payload.id)
             const data = [...state.items]
@@ -46,16 +77,30 @@ export const basketSlice = createSlice({
                 console.warn('not removed', data, index, action.payload.id);
             }
             state.items = data
+
+
+            // updating firebase database
+            const auth = getAuth()
+            const db = getDatabase();
+
+            const cartRef = ref(db, 'users/' + auth.currentUser.uid);
+            const Data = Object.assign({}, state.items)
+                update(cartRef, { cart: Data })
+
         },
+
+
         resetStore: (state) => {
             state.items = []
         },
     }
 })
 
-export const { addToBasket, removeFromBasket, resetStore } = basketSlice.actions
 
-export const selectBasketItems = (state) => state.basket.items
+
+export const { addToBasket, removeFromBasket, resetStore, getCart } = basketSlice.actions
+
+export const selectBasketItems = (state) => state.basket?.items
 
 export const cart = (state) => {
     const toFindDuplicates = (state) => state.basket.items.filter((item, index) => state.indexOf(item) !== index)

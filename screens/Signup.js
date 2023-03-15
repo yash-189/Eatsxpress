@@ -14,6 +14,7 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import Loader from '../components/Loader';
 import * as Progress from 'react-native-progress';
 import { getDatabase, ref, onValue, set } from "firebase/database";
+import auth from '@react-native-firebase/auth';
 
 
 const Signup = () => {
@@ -73,14 +74,14 @@ const Signup = () => {
                     // ...
                 })
                     .then(() => {
-                        set(ref(db, 'users/'+auth.currentUser.uid), {
+                        set(ref(db, 'users/' + auth.currentUser.uid), {
                             username: value.name,
                             email: value.email,
-                            mobile:value.mobile,
-                            cart:'',
-                            orders:'',
-                            address:''
-                          });
+                            mobile: value.mobile,
+                            cart: '',
+                            orders: '',
+                            address: ''
+                        });
 
                     }).catch(error => console.log(error, 'firebsae error'))
 
@@ -108,6 +109,8 @@ const Signup = () => {
             // An error happened.
         });
     }
+
+
     return (
 
 

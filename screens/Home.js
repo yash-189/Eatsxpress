@@ -13,7 +13,7 @@ import FoodCard from '../components/FoodCard';
 import FoodCardItem2 from '../components/FoodCardItem2';
 import * as SplashScreen from 'expo-splash-screen';
 import loadingImage from '../assets/takeout-food.png'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectaddress } from '../features/locationSlice';
 import * as Progress from 'react-native-progress';
 import CategoryCard from '../components/CategoryCard';
@@ -21,6 +21,9 @@ import Loader from '../components/Loader';
 
 import { getDatabase, ref, onValue, set, push, child, update, remove } from "firebase/database";
 import { getAuth } from 'firebase/auth';
+import { getCart } from '../features/basketSlice';
+import { getFav } from '../features/favSlice';
+import Animated, { useSharedValue, useAnimatedStyle,withSpring } from 'react-native-reanimated';
 
 
 const Home = () => {
@@ -68,7 +71,7 @@ const Home = () => {
     }
 
     const [category, setcategory] = useState()
-   
+
     const categoryData = async () => {
         await client.fetch(`
         *[_type== "category"]{
@@ -80,8 +83,8 @@ const Home = () => {
                 console.log(data, 'yyy');
                 setcategory(data)
             })
-            .catch(err=> console.log(err))
-            .finally(()=>setloading(false))
+            .catch(err => console.log(err))
+            .finally(() => setloading(false))
     }
 
 
@@ -103,51 +106,79 @@ const Home = () => {
     console.log(address);
 
 
-    
+    const auth = getAuth()
     const db = getDatabase()
-    console.log(db, 'hhhhhhhhhhhhhhhhhh');
 
-    
-const writeUserData = (userId, name, email, imageUrl)=> {
-    // const db = getDatabase();
-    set(ref(db, 'user/'+'QtBBzn5dRET9OmkzULUgHX9MY9V2'), {
-      username: name,
-      email: email,
-      cart:[],
-      orders:[]
-    //   profile_picture : imageUrl
-    });
-  }
+    const dispach = useDispatch()
 
 
-// const auth = getAuth()
-//   useEffect(() => {
-//     remove(ref(db, 'users/'+auth.currentUser.uid))
-//       .then((res)=>{
-//         console.log('updated');
-//       })
-//       .catch(err=>console.log(err,'updtaerror'))
-//   }, [])
+
+    const offset = useSharedValue(0)
+
+    const anistyle = useAnimatedStyle(()=>{
+        return {
+            transform:[{translateX: withSpring(offset.value * 255)}]
+        }
+    })
+
+    useEffect(() => {
+        setloading(true)
+        const cartRef = ref(db, 'users/' + auth.currentUser.uid + '/cart');
+        onValue(cartRef, (snapshot) => {
+            const data = snapshot.val();
+
+            //  console.log(data,'yyyydata');
+            if (data) {
+                const array = Object.values(data)
 
 
-    // const handleScroll = (event) => {
-    //   const offset = event.nativeEvent.contentOffset.y;
-    //   if (offset > 0 && isTabVisible) {
+                console.log(Object.assign({}, array), 'itemssarauy');
+                dispach(getCart(array))
+            }
+        }, {
+            onlyOnce: true
+        });
 
-    //     setIsTabVisible(false);
-    //   } else if (offset <= 0 && !isTabVisible) {
-    //     setIsTabVisible(true);
-    //   }
-    // };
+
+        const func = async () => {
+
+
+            const favRef = ref(db, 'users/' + auth.currentUser.uid + '/favorite');
+            onValue(favRef, (snapshot) => {
+                const data = snapshot.val();
+
+                if (data) {
+                    console.log(data, 'favvvvvvvvvvvv');
+                    const array = Object.values(data)
+
+
+                    console.log(Object.assign({}, array), 'itemssfav');
+                    dispach(getFav(array))
+                }
+
+
+            }, {
+                onlyOnce: true
+            });
+        }
+        func()
+        // setloading(false)
+
+    }, [])
 
 
     useEffect(() => {
         LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+     
     }, [])
 
     if (loading) {
-        return <Loader/>
+        return <Loader />
     }
+
+
+
+
 
 
     return (
@@ -165,7 +196,7 @@ const writeUserData = (userId, name, email, imageUrl)=> {
 
                         <View className='flex-row  flex-1   space-x-3'>
 
-                            <TouchableOpacity onPress={() => navigation.navigate('MY ACCOUNT')}>
+                            <TouchableOpacity onPress={() => navigation.navigate('Location')}>
 
                                 <HomeIcon size={22} color='#FB6E3B' />
                             </TouchableOpacity>
@@ -209,6 +240,9 @@ const writeUserData = (userId, name, email, imageUrl)=> {
                         <AdjustmentsVerticalIcon size={30} color='gray' />
                     </View>
 
+                    {/* <Animated.View style={[anistyle]} className='p-6 bg-blue-500 w-52 h-40 mx-8'>
+                        <TouchableOpacity className='p-8 bg-red-500' onPress={() => (offset.value = Math.random())}></TouchableOpacity>
+                    </Animated.View> */}
 
                     <View className='mt-6 px-4'>
                         <Text className=' mb-4' style={{ fontSize: 17, lineHeight: 20, fontWeight: '900' }}>Top rated near you</Text>
@@ -217,7 +251,7 @@ const writeUserData = (userId, name, email, imageUrl)=> {
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item }) => <FoodCardItem2 name={item.name}
-                                Rimage={item.image} rating={item.rating} id={item._id}
+                                image={item.image} rating={item.rating} id={item._id}
                                 offer={item.offers?.offer} offername={item.offers?.offername}
                                 offertype={item.offers?.offertype} time={item.time} lat={item.location?.lat}
                                 lng={item.location?.lng} address={item.address} reviews={item.reviews} category={item.category} />}
@@ -235,8 +269,8 @@ const writeUserData = (userId, name, email, imageUrl)=> {
                             renderItem={({ item }) => <CategoryCard image={item.image?.asset?._ref} name={item.name} />}
                         />
 
-                        
-                       
+
+
                     </View>
 
 
@@ -248,7 +282,7 @@ const writeUserData = (userId, name, email, imageUrl)=> {
                         <FlatList
                             data={popularData}
                             renderItem={({ item }) => <FoodCard name={item.name}
-                                Rimage={item.image} rating={item.rating} id={item._id} offer={item.offers?.offer} offername={item.offers?.offername}
+                                image={item.image} rating={item.rating} id={item._id} offer={item.offers?.offer} offername={item.offers?.offername}
                                 offertype={item.offers?.offertype} time={item.time} lat={item.location?.lat} lng={item.location?.lng} address={item.address} reviews={item.reviews} category={item.category}
                             />}
                         />
@@ -259,13 +293,13 @@ const writeUserData = (userId, name, email, imageUrl)=> {
 
 
                     <View className='py-8 px-4 bg-[#032903]'>
-                        <Text className=' mb-4 text-white' style={{ fontSize: 17, lineHeight: 20, fontWeight: '900' }}>Popular Brands</Text>
+                        <Text className=' mb-4 text-white' style={{ fontSize: 17, lineHeight: 20, fontWeight: '900' }}>Popular Items</Text>
                         <FlatList
                             data={popularData}
                             horizontal={true}
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item }) => <FoodCardItem2 name={item.name}
-                                Rimage={item.image} dark={true} rating={item.rating} id={item._id}
+                                image={item.image} dark={true} rating={item.rating} id={item._id}
                                 offer={item.offers?.offer} offername={item.offers?.offername}
                                 offertype={item.offers?.offertype} time={item.time} lat={item.location?.lat} lng={item.location?.lng} address={item.address} reviews={item.reviews} category={item.category} />}
                         />
@@ -281,7 +315,7 @@ const writeUserData = (userId, name, email, imageUrl)=> {
                             data={popularData}
 
                             renderItem={({ item }) => <FoodCard name={item.name}
-                                Rimage={item.image} rating={item.rating} id={item._id} offer={item.offers?.offer} offername={item.offers?.offername}
+                                image={item.image} rating={item.rating} id={item._id} offer={item.offers?.offer} offername={item.offers?.offername}
                                 offertype={item.offers?.offertype} time={item.time} lat={item.location?.lat} lng={item.location?.lng} address={item.address} reviews={item.reviews} category={item.category} />}
                         />
 
@@ -291,7 +325,7 @@ const writeUserData = (userId, name, email, imageUrl)=> {
 
                     {/* {popularData?.map((item) => {
                         return  <FoodCardItem2 name={item.name}  
-                        Rimage={item?.restaurantImage?.asset?._ref}  rating={item.rating} /> 
+                        image={item?.restaurantImage?.asset?._ref}  rating={item.rating} /> 
 
                     })} */}
 
@@ -309,7 +343,7 @@ const writeUserData = (userId, name, email, imageUrl)=> {
 
 
 
-            <StatusBar style="auto" />
+            {/* <StatusBar style="auto" /> */}
 
         </SafeAreaView>
 
