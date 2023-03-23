@@ -24,9 +24,14 @@ import { getAuth } from 'firebase/auth';
 import { getCart } from '../features/basketSlice';
 import { getFav } from '../features/favSlice';
 import Animated, { useSharedValue, useAnimatedStyle,withSpring } from 'react-native-reanimated';
+import { useColorScheme } from 'react-native';
+
 
 
 const Home = () => {
+
+    const isDarkMode = useColorScheme() === 'dark';
+console.log(isDarkMode,'dark');
 
     const [fontsLoaded] = useFonts({
         'SF-Pro-Display-Black': require('../assets/fonts/SF-Pro-Display-Black.ttf'),
@@ -191,7 +196,7 @@ const Home = () => {
                 <ScrollView contentContainerStyle={{ paddingBottom: 90 }}
                     stickyHeaderIndices={[1]}    >
 
-                    <View className='flex-row  px-6 pt-5' >
+                    <View className={`flex-row   px-6 pt-5`} >
 
 
                         <View className='flex-row  flex-1   space-x-3'>
