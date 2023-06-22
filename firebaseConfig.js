@@ -21,7 +21,7 @@ console.log(apiKey,'hhhhhhhhhhhhh');
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBJRjhQ0o5N5K4iycVtzxrjRif1L91n_A4",
+  apiKey: "",
   authDomain: "eatxpress-93e52.firebaseapp.com",
   databaseURL: "https://eatxpress-93e52-default-rtdb.firebaseio.com",
   projectId: "eatxpress-93e52",
