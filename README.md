@@ -20,3 +20,4 @@ EatsXpress is a mobile application built using React Native that allows users to
 - Razorpay API
 - Git Version Control
 
+![Home Screen](screenshots/1.jpg)
