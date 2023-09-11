@@ -21,3 +21,5 @@ EatsXpress is a mobile application built using React Native that allows users to
 - Git Version Control
 
 ![Home Screen](screenshots/1.jpg)
+![Home Screen](screenshots/2.jpeg)
+![Home Screen](screenshot/2.jpeg)
