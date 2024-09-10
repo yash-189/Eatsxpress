@@ -15,7 +15,6 @@ import Main from './Main';
 import ErrorBoundary from 'react-native-error-boundary'
 import { StyleSheet, Text, View } from "react-native";
 import Test from "./screens/Test";
-import Example from "./screens/Example";
 
 
 NativeWindStyleSheet.setOutput({
@@ -77,8 +76,7 @@ export default function App({ route }) {
       <Provider store={store}>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Main/>
-        {/* <Test/> */}
-        {/* <Example/> */}
+        
         </ErrorBoundary>
 
 
