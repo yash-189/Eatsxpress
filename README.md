@@ -1,39 +1,50 @@
-# EatsXpress - React Native Food Delivery App
+# EatsXpress
 
-EatsXpress is a mobile application built using React Native that allows users to order food from their favorite restaurants. Inspired by popular food delivery apps like Swiggy, EatsXpress provides a seamless and user-friendly experience for ordering delicious meals. This repository contains the source code for EatsXpress, which utilizes various technologies, including React Native, Redux, Firebase, Reanimated, and Git.
+A cross-platform food delivery app built with **React Native and Expo**, inspired by apps like Swiggy. Browse restaurants, build a cart, pay and track your orders.
+
+<p align="center">
+  <img src="screenshots/13.jpeg" width="22%" />
+  <img src="screenshots/11.jpeg" width="22%" />
+  <img src="screenshots/7.jpeg" width="22%" />
+  <img src="screenshots/8.jpeg" width="22%" />
+</p>
+<p align="center">
+  <img src="screenshots/2.jpeg" width="22%" />
+  <img src="screenshots/5.jpeg" width="22%" />
+  <img src="screenshots/1.jpeg" width="22%" />
+  <img src="screenshots/9.jpeg" width="22%" />
+</p>
 
 ## Features
 
-- User authentication using Firebase.
-- Real-time updates for order status and restaurant information.
-- Ordering functionality with a user-friendly interface.
-- Order history to track previous orders.
-- Restaurant rating and review system.
-- Integration of Razorpay for secure payment processing.
+- **Auth:** Firebase authentication with phone OTP or email and password, plus onboarding screens
+- **Discovery:** top-rated restaurants, categories, offers and search
+- **Location:** pick your delivery location, with maps and delivery directions
+- **Cart & checkout:** cart, coupons, a detailed bill breakdown and Razorpay payments
+- **Orders:** order status updates, past orders with one-tap reorder, and ratings
+- **Favorites:** save restaurants you like
+- **Account:** addresses, payments and refunds, help
 
-## Technologies Used
+## Tech stack
 
-- React Native
-- Redux
-- Firebase Authentication and Realtime Database
-- Reanimated
-- Razorpay API
-- Git Version Control
+React Native · Expo (EAS) · Redux Toolkit · Redux Persist · Firebase Auth · Sanity CMS · React Navigation · React Native Maps · Reanimated · NativeWind · Razorpay
 
-## Screenshots
+## Project structure
 
-Here are some screenshots from the EatsXpress app:
-![Screenshot 10](screenshots/10.jpeg)
-![Screenshot 11](screenshots/11.jpeg)
-![Screenshot 12](screenshots/12.jpeg)
-![Screenshot 13](screenshots/13.jpeg)
-![Screenshot 1](screenshots/1.jpeg)
-![Screenshot 2](screenshots/2.jpeg)
-![Screenshot 3](screenshots/3.jpeg)
-![Screenshot 4](screenshots/4.jpeg)
-![Screenshot 5](screenshots/5.jpeg)
-![Screenshot 6](screenshots/6.jpeg)
-![Screenshot 7](screenshots/7.jpeg)
-![Screenshot 8](screenshots/8.jpeg)
-![Screenshot 9](screenshots/9.jpeg)
+```
+├── screens/      # app screens (Home, Restaurant, Cart, Delivery, Account…)
+├── components/   # reusable UI (food cards, restaurant cards, tab bar, carousel)
+├── features/     # Redux slices: auth, basket, favorites, location
+├── stacks/       # auth and user navigation stacks
+├── config/       # Firebase setup
+└── Sanity.js     # CMS client for restaurant and menu data
+```
 
+## Run locally
+
+```bash
+npm install
+npx expo start
+```
+
+You'll need your own Firebase project and Sanity project, configured in `config/Firebase.js` and `Sanity.js`.
