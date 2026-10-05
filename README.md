@@ -17,13 +17,13 @@ A cross-platform food delivery app built with **React Native and Expo**, inspire
 
 ## Features
 
-- **Auth:** Firebase authentication with phone OTP or email and password, plus onboarding screens
-- **Discovery:** top-rated restaurants, categories, offers and search
-- **Location:** pick your delivery location, with maps and delivery directions
-- **Cart & checkout:** cart, coupons, a detailed bill breakdown and Razorpay payments
-- **Orders:** order status updates, past orders with one-tap reorder, and ratings
-- **Favorites:** save restaurants you like
-- **Account:** addresses, payments and refunds, help
+- Login with phone OTP or email and password (Firebase), plus onboarding screens
+- Top-rated restaurants, categories, offers and search
+- Delivery location picker with maps and directions
+- Cart with coupons, a detailed bill and Razorpay payments
+- Order status updates, past orders with one-tap reorder, and ratings
+- Favorite restaurants
+- Account page with addresses, payments and refunds, and help
 
 ## Tech stack
 
