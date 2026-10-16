@@ -10,7 +10,11 @@ A cross-platform food delivery app built with **React Native and Expo**, inspire
 
 ### Sign in
 
-![Onboarding, phone login, OTP and email login screens](screenshots/signin.jpg)
+![Phone login, OTP, email login and sign up screens](screenshots/signin.jpg)
+
+### Onboarding
+
+![Three onboarding screens](screenshots/onboard.jpg)
 
 ## Features
 
