@@ -4,17 +4,19 @@ A cross-platform food delivery app built with **React Native and Expo**, inspire
 
 ![EatsXpress screens](screenshots/hero.jpg)
 
-### Ordering
+## Screens
 
-![Home, restaurant, cart and account screens](screenshots/order.jpg)
+### 1. Onboarding
 
-### Sign in
+![Three onboarding screens](screenshots/onboard.jpg)
+
+### 2. Sign in and sign up
 
 ![Phone login, OTP, email login and sign up screens](screenshots/signin.jpg)
 
-### Onboarding
+### 3. Ordering and account
 
-![Three onboarding screens](screenshots/onboard.jpg)
+![Home, restaurant, cart and account screens](screenshots/order.jpg)
 
 ## Features
 
